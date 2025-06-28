@@ -32,7 +32,7 @@ const Landing = () => {
               variant="outline"
               onClick={() => navigate('/vibe-journal')}
             >
-              View Demo
+              Try Demo
             </Button>
           </div>
         </div>
