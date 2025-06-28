@@ -101,3 +101,39 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Add to your existing index.css */
+
+/* Mobile-first responsive utilities */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.break-words {
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Ensure touch targets are at least 44px */
+@media (max-width: 640px) {
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Improve scrolling on mobile */
+.scroll-smooth {
+  scroll-behavior: smooth;
+}
+
+/* Safe area for mobile devices with notches */
+@supports (padding: max(0px)) {
+  .safe-area-inset {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}

@@ -56,9 +56,9 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl">
+      <Card className="w-full max-w-md mx-auto">
+        <CardHeader className="text-center space-y-2">
+          <CardTitle className="text-xl sm:text-2xl">
             {isLogin ? 'Welcome Back' : 'Create Account'}
           </CardTitle>
         </CardHeader>
@@ -72,7 +72,7 @@ const Auth = () => {
                   placeholder="Full Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 text-sm sm:text-base"
                   required
                 />
               </div>
@@ -85,7 +85,7 @@ const Auth = () => {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="pl-10"
+                className="pl-10 text-sm sm:text-base"
                 required
               />
             </div>
@@ -97,7 +97,7 @@ const Auth = () => {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="pl-10"
+                className="pl-10 text-sm sm:text-base"
                 required
               />
             </div>
@@ -111,7 +111,7 @@ const Auth = () => {
             <button
               type="button"
               onClick={() => setIsLogin(!isLogin)}
-              className="text-purple-600 hover:underline"
+              className="text-sm sm:text-base text-purple-600 hover:underline"
             >
               {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
             </button>

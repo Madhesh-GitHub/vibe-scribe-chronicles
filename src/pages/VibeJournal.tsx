@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -222,14 +221,14 @@ const VibeJournal = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background p-4">
+    <div className="min-h-screen bg-background p-2 sm:p-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-8">Vibe Journal</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8">Vibe Journal</h1>
         
         {/* Entry Form */}
-        <Card className="mb-8">
+        <Card className="mb-6 sm:mb-8">
           <CardHeader>
-            <CardTitle>How are you feeling today?</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">How are you feeling today?</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -238,13 +237,13 @@ const VibeJournal = () => {
                   placeholder="How do you feel today?"
                   value={vibeText}
                   onChange={(e) => setVibeText(e.target.value)}
-                  className="min-h-[100px]"
+                  className="min-h-[80px] sm:min-h-[100px] text-sm sm:text-base"
                 />
               </div>
               
               <div>
                 <Select value={selectedMood} onValueChange={setSelectedMood}>
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select your mood" />
                   </SelectTrigger>
                   <SelectContent>
@@ -266,29 +265,29 @@ const VibeJournal = () => {
 
         {/* Vibes List */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Your Vibes</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold">Your Vibes</h2>
           
           {vibes.length === 0 ? (
             <Card>
-              <CardContent className="p-6 text-center text-muted-foreground">
+              <CardContent className="p-4 sm:p-6 text-center text-muted-foreground">
                 No vibes yet. Share how you're feeling!
               </CardContent>
             </Card>
           ) : (
             vibes.map((vibe) => (
               <Card key={vibe.id}>
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex-1">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                    <div className="flex-1 w-full sm:w-auto">
                       {editingId === vibe.id ? (
                         <div className="space-y-3">
                           <Textarea
                             value={editText}
                             onChange={(e) => setEditText(e.target.value)}
-                            className="min-h-[80px]"
+                            className="min-h-[60px] sm:min-h-[80px] text-sm sm:text-base"
                           />
                           <Select value={editMood} onValueChange={setEditMood}>
-                            <SelectTrigger>
+                            <SelectTrigger className="w-full">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -302,20 +301,20 @@ const VibeJournal = () => {
                         </div>
                       ) : (
                         <>
-                          <p className="text-lg mb-2">{vibe.text}</p>
+                          <p className="text-base sm:text-lg mb-2 break-words">{vibe.text}</p>
                           <div className="flex items-center gap-2 mb-2">
-                            <span className={`px-2 py-1 rounded-full text-sm font-medium ${getMoodColor(vibe.mood)}`}>
+                            <span className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${getMoodColor(vibe.mood)}`}>
                               {vibe.mood}
                             </span>
                           </div>
                         </>
                       )}
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs sm:text-sm text-muted-foreground">
                         {formatDate(vibe.created_at)}
                       </p>
                     </div>
                     
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 w-full sm:w-auto justify-end">
                       {editingId === vibe.id ? (
                         <>
                           <Button
@@ -323,7 +322,7 @@ const VibeJournal = () => {
                             onClick={() => handleSaveEdit(vibe.id)}
                             className="h-8 w-8 p-0"
                           >
-                            <Check className="h-4 w-4" />
+                            <Check className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
                           <Button
                             size="sm"
@@ -331,7 +330,7 @@ const VibeJournal = () => {
                             onClick={handleCancelEdit}
                             className="h-8 w-8 p-0"
                           >
-                            <X className="h-4 w-4" />
+                            <X className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
                         </>
                       ) : (
@@ -342,7 +341,7 @@ const VibeJournal = () => {
                             onClick={() => handleEdit(vibe)}
                             className="h-8 w-8 p-0"
                           >
-                            <Edit className="h-4 w-4" />
+                            <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
                           <Button
                             size="sm"
@@ -350,7 +349,7 @@ const VibeJournal = () => {
                             onClick={() => handleDelete(vibe.id)}
                             className="h-8 w-8 p-0"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
                         </>
                       )}

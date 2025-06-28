@@ -278,26 +278,26 @@ const EnhancedJournal = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-background p-2 sm:p-4">
+      <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6">
         {/* Header with Logout */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 sm:mb-8 gap-4">
           <div className="text-center flex-1">
-            <h1 className="text-4xl font-bold mb-2">Your Daily Reflection</h1>
-            <p className="text-muted-foreground">Reflect on your day, track your growth, and capture meaningful moments</p>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">Your Daily Reflection</h1>
+            <p className="text-sm sm:text-base text-muted-foreground px-4">Reflect on your day, track your growth, and capture meaningful moments</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full sm:w-auto">
             {user && (
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <User className="h-4 w-4" />
-                <span>{user.email}</span>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                <User className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="truncate max-w-[200px]">{user.email}</span>
               </div>
             )}
             <Button 
               onClick={handleLogout}
               variant="outline"
               size="sm"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 w-full sm:w-auto"
             >
               <LogOut className="h-4 w-4" />
               Logout
@@ -308,22 +308,22 @@ const EnhancedJournal = () => {
         {/* Enhanced Entry Form */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+              <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
               {editingEntry ? 'Edit Entry' : 'Daily Reflection'}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 sm:space-y-6">
             {/* Date Selection */}
             <div className="flex items-center gap-2">
               <CalendarIcon className="h-4 w-4" />
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline">
+                  <Button variant="outline" className="w-full sm:w-auto justify-start">
                     {format(selectedDate, 'PPP')}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
+                <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
                     selected={selectedDate}
@@ -347,13 +347,13 @@ const EnhancedJournal = () => {
               placeholder="How would you describe your day?"
               value={currentEntry.title}
               onChange={(e) => setCurrentEntry(prev => ({ ...prev, title: e.target.value }))}
-              className="text-lg font-medium"
+              className="text-base sm:text-lg font-medium"
             />
 
             {/* Mood Selector */}
             <div className="space-y-2">
               <label className="text-sm font-medium">How did you feel today?</label>
-              <div className="flex gap-2">
+              <div className="grid grid-cols-2 sm:flex gap-2">
                 {moodEmojis.map((mood) => {
                   const Icon = mood.icon;
                   return (
@@ -362,9 +362,9 @@ const EnhancedJournal = () => {
                       variant={currentEntry.mood === mood.value ? "default" : "outline"}
                       size="sm"
                       onClick={() => setCurrentEntry(prev => ({ ...prev, mood: mood.value }))}
-                      className="flex flex-col gap-1 h-auto py-2"
+                      className="flex flex-col gap-1 h-auto py-2 px-2 sm:px-3"
                     >
-                      <Icon className={`h-4 w-4 ${mood.color}`} />
+                      <Icon className={`h-3 w-3 sm:h-4 sm:w-4 ${mood.color}`} />
                       <span className="text-xs">{mood.label}</span>
                     </Button>
                   );
@@ -377,7 +377,7 @@ const EnhancedJournal = () => {
               placeholder="Reflect on your day... What happened? How did you feel? What did you learn?"
               value={currentEntry.content}
               onChange={(e) => setCurrentEntry(prev => ({ ...prev, content: e.target.value }))}
-              className="min-h-[200px]"
+              className="min-h-[150px] sm:min-h-[200px] text-sm sm:text-base"
             />
 
             {/* Gratitude Section */}
@@ -386,18 +386,21 @@ const EnhancedJournal = () => {
                 <Heart className="h-4 w-4 text-red-500" />
                 What were you grateful for today?
               </label>
-              {currentEntry.gratitude.map((item, index) => (
-                <Input
-                  key={index}
-                  placeholder={`Gratitude ${index + 1} - What made you feel thankful today?`}
-                  value={item}
-                  onChange={(e) => {
-                    const newGratitude = [...currentEntry.gratitude];
-                    newGratitude[index] = e.target.value;
-                    setCurrentEntry(prev => ({ ...prev, gratitude: newGratitude }));
-                  }}
-                />
-              ))}
+              <div className="space-y-2">
+                {currentEntry.gratitude.map((item, index) => (
+                  <Input
+                    key={index}
+                    placeholder={`Gratitude ${index + 1} - What made you feel thankful today?`}
+                    value={item}
+                    onChange={(e) => {
+                      const newGratitude = [...currentEntry.gratitude];
+                      newGratitude[index] = e.target.value;
+                      setCurrentEntry(prev => ({ ...prev, gratitude: newGratitude }));
+                    }}
+                    className="text-sm sm:text-base"
+                  />
+                ))}
+              </div>
             </div>
 
             {/* Goals Section */}
@@ -406,32 +409,36 @@ const EnhancedJournal = () => {
                 <Target className="h-4 w-4 text-blue-500" />
                 What did you accomplish today? What goals did you work towards?
               </label>
-              {currentEntry.goals.map((goal, index) => (
-                <div key={index} className="flex gap-2">
-                  <Input
-                    placeholder={`Achievement ${index + 1} - What did you accomplish?`}
-                    value={goal}
-                    onChange={(e) => {
-                      const newGoals = [...currentEntry.goals];
-                      newGoals[index] = e.target.value;
-                      setCurrentEntry(prev => ({ ...prev, goals: newGoals }));
-                    }}
-                  />
-                  {index === currentEntry.goals.length - 1 && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCurrentEntry(prev => ({ 
-                        ...prev, 
-                        goals: [...prev.goals, ''] 
-                      }))}
-                    >
-                      +
-                    </Button>
-                  )}
-                </div>
-              ))}
+              <div className="space-y-2">
+                {currentEntry.goals.map((goal, index) => (
+                  <div key={index} className="flex gap-2">
+                    <Input
+                      placeholder={`Achievement ${index + 1} - What did you accomplish?`}
+                      value={goal}
+                      onChange={(e) => {
+                        const newGoals = [...currentEntry.goals];
+                        newGoals[index] = e.target.value;
+                        setCurrentEntry(prev => ({ ...prev, goals: newGoals }));
+                      }}
+                      className="text-sm sm:text-base"
+                    />
+                    {index === currentEntry.goals.length - 1 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentEntry(prev => ({ 
+                          ...prev, 
+                          goals: [...prev.goals, ''] 
+                        }))}
+                        className="shrink-0"
+                      >
+                        +
+                      </Button>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Highlights */}
@@ -444,6 +451,7 @@ const EnhancedJournal = () => {
                 placeholder="What moment made today special or memorable?"
                 value={currentEntry.highlights}
                 onChange={(e) => setCurrentEntry(prev => ({ ...prev, highlights: e.target.value }))}
+                className="text-sm sm:text-base"
               />
             </div>
 
@@ -455,29 +463,29 @@ const EnhancedJournal = () => {
               </label>
               <div className="flex gap-2 flex-wrap">
                 {currentEntry.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="cursor-pointer" onClick={() => removeTag(tag)}>
+                  <Badge key={tag} variant="secondary" className="cursor-pointer text-xs" onClick={() => removeTag(tag)}>
                     {tag} ×
                   </Badge>
                 ))}
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                   <Input
                     placeholder="Add tag (work, family, exercise, etc.)"
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && addTag()}
-                    className="w-48"
+                    className="w-full sm:w-48 text-sm sm:text-base"
                   />
-                  <Button type="button" size="sm" onClick={addTag}>Add</Button>
+                  <Button type="button" size="sm" onClick={addTag} className="w-full sm:w-auto">Add</Button>
                 </div>
               </div>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button onClick={handleSaveEntry} disabled={loading} className="flex-1">
                 {loading ? 'Saving...' : (editingEntry ? 'Update Entry' : 'Save Reflection')}
               </Button>
               {editingEntry && (
-                <Button onClick={handleCancelEdit} variant="outline">
+                <Button onClick={handleCancelEdit} variant="outline" className="w-full sm:w-auto">
                   <X className="h-4 w-4 mr-2" />
                   Cancel
                 </Button>
@@ -488,56 +496,58 @@ const EnhancedJournal = () => {
 
         {/* Recent Entries */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-semibold flex items-center gap-2">
-            <TrendingUp className="h-5 w-5" />
+          <h2 className="text-xl sm:text-2xl font-semibold flex items-center gap-2">
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
             Your Journey
           </h2>
           {entries.length === 0 ? (
             <Card>
-              <CardContent className="p-6 text-center text-muted-foreground">
+              <CardContent className="p-4 sm:p-6 text-center text-muted-foreground">
                 No reflections yet. Start writing to see your growth journey!
               </CardContent>
             </Card>
           ) : (
             entries.map((entry) => (
               <Card key={entry.id} className={editingEntry?.id === entry.id ? "ring-2 ring-blue-500" : ""}>
-                <CardContent className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold">{entry.title}</h3>
-                      <p className="text-sm text-muted-foreground">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-4">
+                    <div className="flex-1 w-full sm:w-auto">
+                      <h3 className="text-base sm:text-lg font-semibold break-words">{entry.title}</h3>
+                      <p className="text-xs sm:text-sm text-muted-foreground">
                         {format(new Date(entry.entry_date), 'PPP')}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
                       {moodEmojis.find(m => m.value === entry.mood) && (
-                        <Badge variant="outline" className="flex items-center gap-1">
+                        <Badge variant="outline" className="flex items-center gap-1 text-xs">
                           {React.createElement(moodEmojis.find(m => m.value === entry.mood)!.icon, {
                             className: `h-3 w-3 ${moodEmojis.find(m => m.value === entry.mood)!.color}`
                           })}
                           {moodEmojis.find(m => m.value === entry.mood)!.label}
                         </Badge>
                       )}
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleEditEntry(entry)}
-                        className="h-8 w-8 p-0"
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => handleDeleteEntry(entry.id)}
-                        className="h-8 w-8 p-0"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleEditEntry(entry)}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => handleDeleteEntry(entry.id)}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                   
-                  <p className="text-sm mb-4 line-clamp-3">{entry.content}</p>
+                  <p className="text-sm mb-4 line-clamp-3 break-words">{entry.content}</p>
                   
                   {entry.highlights && (
                     <div className="mb-3">
@@ -545,7 +555,7 @@ const EnhancedJournal = () => {
                         <Star className="h-3 w-3" />
                         Highlight:
                       </span>
-                      <p className="text-sm text-muted-foreground mt-1">{entry.highlights}</p>
+                      <p className="text-sm text-muted-foreground mt-1 break-words">{entry.highlights}</p>
                     </div>
                   )}
                   
@@ -557,7 +567,7 @@ const EnhancedJournal = () => {
                       </span>
                       <ul className="text-sm text-muted-foreground mt-1 list-disc list-inside">
                         {entry.gratitude.map((item, index) => (
-                          <li key={index}>{item}</li>
+                          <li key={index} className="break-words">{item}</li>
                         ))}
                       </ul>
                     </div>
@@ -566,7 +576,7 @@ const EnhancedJournal = () => {
                   {entry.tags && entry.tags.length > 0 && (
                     <div className="flex gap-1 flex-wrap">
                       {entry.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
+                        <Badge key={tag} variant="secondary" className="text-xs break-all">
                           {tag}
                         </Badge>
                       ))}
