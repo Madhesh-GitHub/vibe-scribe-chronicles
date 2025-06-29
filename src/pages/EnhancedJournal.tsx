@@ -54,11 +54,12 @@ const EnhancedJournal = () => {
     highlights: '',
     entry_date: format(new Date(), 'yyyy-MM-dd')
   });
-  const [editingEntry, setEditingEntry] = useState<JournalEntry | null>(null);
+  const { user } = supabase.auth;
+  const [editingEntry, setEditingEntry] = useState<any>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [newTag, setNewTag] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<any>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -91,7 +92,8 @@ const EnhancedJournal = () => {
   };
 
   const handleSaveEntry = async () => {
-    const entryToSave = editingEntry || currentEntry;
+    // Use currentEntry for both create and update operations
+    const entryToSave = currentEntry;
     
     if (!entryToSave.title.trim() || !entryToSave.content.trim()) {
       toast({
@@ -104,11 +106,8 @@ const EnhancedJournal = () => {
 
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Not authenticated');
-
       if (editingEntry) {
-        // Update existing entry
+        // Update existing entry - use editingEntry.id but currentEntry data
         const { error } = await supabase
           .from('journal_entries')
           .update({
@@ -121,7 +120,7 @@ const EnhancedJournal = () => {
             highlights: entryToSave.highlights,
             entry_date: entryToSave.entry_date
           })
-          .eq('id', editingEntry.id);
+          .eq('id', editingEntry.id); // Use editingEntry.id for the WHERE clause
 
         if (error) throw error;
 
@@ -129,14 +128,19 @@ const EnhancedJournal = () => {
           title: "Success",
           description: "Journal entry updated!"
         });
+        
+        // Clear editing state
         setEditingEntry(null);
+        setIsEditMode(false);
       } else {
         // Create new entry
+        const { data: { user } } = await supabase.auth.getUser();
+        
         const { error } = await supabase
           .from('journal_entries')
           .insert([{
             ...entryToSave,
-            user_id: user.id,
+            user_id: user?.id,
             gratitude: entryToSave.gratitude.filter(g => g.trim()),
             goals: entryToSave.goals.filter(g => g.trim())
           }]);
@@ -149,7 +153,7 @@ const EnhancedJournal = () => {
         });
       }
 
-      // Reset form
+      // Reset form to initial state
       setCurrentEntry({
         title: '',
         content: '',
@@ -161,11 +165,17 @@ const EnhancedJournal = () => {
         entry_date: format(new Date(), 'yyyy-MM-dd')
       });
 
+      // Reset date picker
+      setSelectedDate(new Date());
+
+      // Refresh entries list
       fetchEntries();
+      
     } catch (error: any) {
+      console.error('Save error:', error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || "Failed to save entry",
         variant: "destructive"
       });
     } finally {
@@ -173,8 +183,10 @@ const EnhancedJournal = () => {
     }
   };
 
-  const handleEditEntry = (entry: JournalEntry) => {
+  const handleEditEntry = (entry: any) => {
     setEditingEntry(entry);
+    setIsEditMode(true);
+    
     setCurrentEntry({
       title: entry.title,
       content: entry.content,
@@ -189,6 +201,7 @@ const EnhancedJournal = () => {
   };
 
   const handleCancelEdit = () => {
+    setIsEditMode(false);
     setEditingEntry(null);
     setCurrentEntry({
       title: '',
@@ -267,15 +280,8 @@ const EnhancedJournal = () => {
   };
 
   useEffect(() => {
-    // Get user info
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-    };
-    
-    getUser();
     fetchEntries();
-  }, []);
+  }, []); // Remove the user fetching part since you're using supabase.auth directly
 
   return (
     <div className="min-h-screen bg-background p-2 sm:p-4">
