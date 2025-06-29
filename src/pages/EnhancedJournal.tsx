@@ -565,15 +565,30 @@ const EnhancedJournal = () => {
                     </div>
                   )}
                   
-                  {entry.gratitude && entry.gratitude.length > 0 && (
+                  {entry.gratitude && entry.gratitude.length > 0 && entry.gratitude.some(item => item.trim()) && (
                     <div className="mb-3">
                       <span className="text-xs font-medium text-red-600 flex items-center gap-1">
                         <Heart className="h-3 w-3" />
                         Grateful for:
                       </span>
                       <ul className="text-sm text-muted-foreground mt-1 list-disc list-inside">
-                        {entry.gratitude.map((item, index) => (
+                        {entry.gratitude.filter(item => item.trim()).map((item, index) => (
                           <li key={index} className="break-words">{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {/* ADD THIS SECTION: Goals/Accomplishments Display */}
+                  {entry.goals && entry.goals.length > 0 && entry.goals.some(goal => goal.trim()) && (
+                    <div className="mb-3">
+                      <span className="text-xs font-medium text-blue-600 flex items-center gap-1">
+                        <Target className="h-3 w-3" />
+                        Accomplishments:
+                      </span>
+                      <ul className="text-sm text-muted-foreground mt-1 list-disc list-inside">
+                        {entry.goals.filter(goal => goal.trim()).map((goal, index) => (
+                          <li key={index} className="break-words">{goal}</li>
                         ))}
                       </ul>
                     </div>
