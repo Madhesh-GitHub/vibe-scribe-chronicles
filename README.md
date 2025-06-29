@@ -1,1 +1,1 @@
-It is VibeJournal done by vibe coding.
+It is VibeJournal, I made this to write journals everyday!
