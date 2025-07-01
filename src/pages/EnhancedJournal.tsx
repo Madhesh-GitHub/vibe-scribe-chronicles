@@ -25,7 +25,8 @@ import {
   Save,
   X,
   LogOut,
-  User
+  User,
+  BarChart3
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -299,6 +300,15 @@ const EnhancedJournal = () => {
                 <span className="truncate max-w-[200px]">{user.email}</span>
               </div>
             )}
+            <Button 
+              onClick={() => navigate('/analytics')}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2 w-full sm:w-auto"
+            >
+              <BarChart3 className="h-4 w-4" />
+              Analytics
+            </Button>
             <Button 
               onClick={handleLogout}
               variant="outline"
